@@ -21,7 +21,7 @@ function registerWithEureka(port) {
       },
     },
     eureka: {
-      host: process.env.EUREKA_HOST || "host.docker.internal",
+      host: process.env.EUREKA_HOST || "10.0.2.15",
       port: 8761,
       servicePath: "/eureka/apps/",
     },

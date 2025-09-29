@@ -4,6 +4,7 @@ Este archivo maneja las solicitudes HTTP relacionadas con la autenticación de u
 
 const authService = require("../service/auth.service");
 
+// Controlador del servicio crear usuario
 exports.createUser = async (req, res) => {
   const { customerid, password } = req.body;
   try {
@@ -14,6 +15,7 @@ exports.createUser = async (req, res) => {
   }
 };
 
+//controlador servicio autenticar usuario
 exports.authUser = async (req, res) => {
   const { customerid, password } = req.body;
   try {

@@ -2,7 +2,7 @@
 Este archivo contiene la lógica de negocio para la autenticación de usuarios.
 */
 
-const User = require("../models/user.model");
+const User = require("../model/user.model");
 
 // Función para crear un nuevo usuario
 exports.createUser = async (customerid, password) => {
