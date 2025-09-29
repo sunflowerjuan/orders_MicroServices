@@ -1,0 +1,60 @@
+services:
+  eureka-server:
+    build: ./api-gateway/eureka-server
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    profiles: ["gateway"]
+  cloud-gateway:
+    build: ./api-gateway/cloud-gateway
+    container_name: cloud-gateway
+    environment:
+      EUREKA_HOST: eureka-server
+      EUREKA_PORT: 8761
+      SPRING_APPLICATION_NAME: api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      eureka-server:
+        condition: service_started
+    profiles: ["gateway"]
+
+  mysql-db:
+    image: mysql:8
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: login_db
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "${MYSQL_PORT}:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    profiles: ["services"]
+
+  login-service:
+    build: ./auth-service
+    container_name: login-service
+    environment:
+      DB_HOST: mysql-db
+      DB_NAME: login_db
+      DB_USER: ${MYSQL_USER}
+      DB_PASS: ${MYSQL_PASSWORD}
+      EUREKA_HOST: eureka-server
+      EUREKA_PORT: 8761
+    ports:
+      - "3000:3000"
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    profiles: ["services"]
+
+volumes:
+  db_data:
