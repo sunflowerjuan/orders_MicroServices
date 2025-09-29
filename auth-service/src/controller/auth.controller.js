@@ -27,3 +27,7 @@ exports.authUser = async (req, res) => {
     res.status(500).json({ message: "Error autenticando usuario", error });
   }
 };
+
+exports.hello = async (req, res) => {
+  res.json({ message: "HOLA QUE MAS" });
+};

@@ -9,7 +9,7 @@ const app = express();
 app.use(bodyParser.json());
 
 // Rutas
-app.use("/login", authRoutes);
+app.use("/", authRoutes);
 
 // Sincronizar con DB
 sequelize
