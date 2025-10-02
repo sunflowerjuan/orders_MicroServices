@@ -1,33 +1,42 @@
-/* auth.controller.js
-Este archivo maneja las solicitudes HTTP relacionadas con la autenticación de usuarios.
-*/
-
 const authService = require("../service/auth.service");
+const jwt = require("jsonwebtoken");
 
-// Controlador del servicio crear usuario
+const SECRET_KEY = process.env.KEY;
+
+// Crear usuario
 exports.createUser = async (req, res) => {
-  const { customerid, password } = req.body;
+  const { username, password } = req.body;
   try {
-    const user = await authService.createUser(customerid, password);
+    const user = await authService.createUser(username, password);
     res.status(201).json(user);
   } catch (error) {
     res.status(500).json({ message: "Error creando usuario", error });
   }
 };
 
-//controlador servicio autenticar usuario
+// Autenticar usuario
 exports.authUser = async (req, res) => {
-  const { customerid, password } = req.body;
+  const { username, password } = req.body;
   try {
-    const user = await authService.authUser(customerid, password);
+    const user = await authService.authUser(username, password);
     if (!user)
       return res.status(401).json({ message: "Credenciales inválidas" });
-    res.json({ message: "Usuario autenticado", user });
+
+    // Generar token JWT con username
+    const token = jwt.sign({ username: user.username }, SECRET_KEY, {
+      expiresIn: "1h",
+    });
+
+    res.json({
+      message: "Usuario autenticado",
+      token,
+    });
   } catch (error) {
     res.status(500).json({ message: "Error autenticando usuario", error });
   }
 };
 
+// test
 exports.hello = async (req, res) => {
   res.json({ message: "HOLA QUE MAS" });
 };

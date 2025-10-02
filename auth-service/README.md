@@ -18,24 +18,23 @@ Este microservicio gestiona la autenticación y autorización de usuarios en el 
 - Crear un usuario:
 
   ```bash
-  curl -X POST http://localhost:8080/login/createuser \
+  curl -X POST http://obama.localhost/login/createuser \
   -H "Content-Type: application/json" \
   -d '{
-    "customerid": "juan123",
-    "password": "secreto"
+    "username": "majo",
+    "password": "181818"
   }'
   ```
 
 - Autenticar un usuario:
 
   ```bash
-  curl -X POST http://localhost:8080/login/authuser \
+  curl -X POST http://obama.localhost/login/authuser \
   -H "Content-Type: application/json" \
   -d '{
-    "customerid": "juan123",
-    "password": "secreto"
+    "username": "majo",
+    "password": "181818"
   }'
-
   ```
 
 ## Contribución

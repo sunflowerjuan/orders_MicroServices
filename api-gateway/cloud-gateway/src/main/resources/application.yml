@@ -16,9 +16,10 @@ spring:
         - id: login-service
           uri: lb://login-service
           predicates:
+            - Host=obama.localhost
             - Path=/login/**
           filters:
-            - StripPrefix=1 # elimina "/login" y pasa lo demás al servicio
+            - StripPrefix=1
 
 eureka:
   client:
