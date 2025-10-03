@@ -1,0 +1,50 @@
+.auth-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #f5f6fa;
+}
+
+.card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 350px;
+  text-align: center;
+}
+
+.logo-container {
+  margin-bottom: 1rem;
+}
+
+.logo {
+  width: 350px;
+  height: auto;
+}
+
+.tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1rem;
+}
+
+.tab {
+  flex: 1;
+  padding: 0.5rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-weight: bold;
+}
+
+.tab.active {
+  border-bottom: 2px solid #007bff;
+  color: #007bff;
+}
+
+.card-body {
+  margin-top: 1rem;
+}
