@@ -9,7 +9,7 @@ logging:
 
 spring:
   application:
-    name: api-gateway`
+    name: api-gateway
 
   cloud:
     gateway:
@@ -33,7 +33,7 @@ spring:
             allowCredentials: true
 
       routes:
-        ## LOGIN microservice
+        # LOGIN microservice (no protegido)
         - id: login-service
           uri: lb://login-service
           predicates:
@@ -42,7 +42,7 @@ spring:
           filters:
             - StripPrefix=1
 
-              ## CUSTOMER microservice
+        # CUSTOMER microservice (protegido con JWT)
         - id: customer-service
           uri: lb://customer-service
           predicates:
@@ -50,6 +50,7 @@ spring:
             - Path=/customers/**
           filters:
             - StripPrefix=1
+            - name: JwtAuthenticationFilter
 
 eureka:
   client:
