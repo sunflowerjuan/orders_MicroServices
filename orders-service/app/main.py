@@ -19,7 +19,12 @@ def run_eureka():
 @app.on_event("startup")
 async def startup_event():
     await init_db()
-    threading.Thread(target=run_eureka, daemon=True).start()
+    threading.Thread(
+        target=start_eureka_registration,
+        args=("order-service", "eureka-server", 8761, 8083, "order-service"),
+        daemon=True
+    ).start()
+
 
 if __name__ == "__main__":
     uvicorn.run("app.main:app", host="0.0.0.0", port=8083)

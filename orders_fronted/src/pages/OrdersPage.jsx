@@ -11,12 +11,8 @@ export default function OrdersPage() {
   const [form, setForm] = useState({
     orderID: "",
     customerid: "",
-    product: "",
-    quantity: 1,
-    price: "",
   });
   const [searchOrderID, setSearchOrderID] = useState("");
-  const [order, setOrder] = useState(null);
   const [ordersList, setOrdersList] = useState([]);
   const [newStatus, setNewStatus] = useState("Received");
 
@@ -40,14 +36,28 @@ export default function OrdersPage() {
       setMessage("Primero busca un cliente válido.");
       return;
     }
+
     try {
-      const { data } = await ordersService.createOrder(form);
-      setMessage("Pedido creado exitosamente.");
-      setOrder(data);
+      const payload = {
+        customerid: form.customerid,
+        orderID: form.orderID,
+        status: "PENDING",
+        orderCreated: true,
+      };
+
+      const { data } = await ordersService.createOrder(payload);
+      setMessage("✅ Pedido creado exitosamente.");
+
+      setForm({
+        orderID: "",
+        customerid: form.customerid,
+      });
     } catch (err) {
-      setMessage(
-        "Error creando pedido: " + (err.response?.data?.detail || err.message)
-      );
+      const detail =
+        err.response?.data?.detail ||
+        err.response?.data?.message ||
+        err.message;
+      setMessage("❌ Error creando pedido: " + detail);
     }
   };
 
@@ -117,10 +127,7 @@ export default function OrdersPage() {
                   value={form.customerid}
                   onChange={handleChange}
                 />
-                <button
-                  className="btn-search"
-                  onClick={handleCustomerSearch}
-                >
+                <button className="btn-search" onClick={handleCustomerSearch}>
                   Buscar Cliente
                 </button>
 
@@ -132,39 +139,21 @@ export default function OrdersPage() {
                   onChange={handleChange}
                   disabled={!customer}
                 />
-                <input
-                  type="text"
-                  name="product"
-                  placeholder="Producto"
-                  value={form.product}
-                  onChange={handleChange}
-                  disabled={!customer}
-                />
-                <input
-                  type="number"
-                  name="quantity"
-                  placeholder="Cantidad"
-                  value={form.quantity}
-                  onChange={handleChange}
-                  disabled={!customer}
-                />
-                <input
-                  type="number"
-                  name="price"
-                  placeholder="Precio"
-                  value={form.price}
-                  onChange={handleChange}
-                  disabled={!customer}
-                />
               </div>
 
-              {/* Info del cliente */}
               {customer && (
                 <div className="customer-summary">
                   <h4>Cliente Encontrado</h4>
-                  <p><strong>Nombre:</strong> {customer.firstname} {customer.lastname}</p>
-                  <p><strong>Dirección:</strong> {customer.address}</p>
-                  <p><strong>Correo:</strong> {customer.email}</p>
+                  <p>
+                    <strong>Nombre:</strong> {customer.firstname}{" "}
+                    {customer.lastname}
+                  </p>
+                  <p>
+                    <strong>Dirección:</strong> {customer.address}
+                  </p>
+                  <p>
+                    <strong>Correo:</strong> {customer.email}
+                  </p>
                 </div>
               )}
 
@@ -219,10 +208,9 @@ export default function OrdersPage() {
                 <div className="orders-list">
                   {ordersList.map((o) => (
                     <div key={o.orderID} className="order-card">
-                      <p><strong>ID Pedido:</strong> {o.orderID}</p>
-                      <p><strong>Producto:</strong> {o.product}</p>
-                      <p><strong>Cantidad:</strong> {o.quantity}</p>
-                      <p><strong>Precio:</strong> ${o.price}</p>
+                      <p>
+                        <strong>ID Pedido:</strong> {o.orderID}
+                      </p>
                       <p className={`status ${o.status.toLowerCase()}`}>
                         <strong>Estado:</strong> {o.status}
                       </p>

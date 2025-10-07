@@ -52,8 +52,8 @@ spring:
             - StripPrefix=1
 
         # ORDERS microservice (protegido con JWT)
-        - id: orders-service
-          uri: lb://orders-service
+        - id: order-service
+          uri: lb://order-service
           predicates:
             - Host=obama.localhost
             - Path=/orders/**
