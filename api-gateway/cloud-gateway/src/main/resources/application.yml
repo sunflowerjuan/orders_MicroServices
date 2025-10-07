@@ -50,7 +50,15 @@ spring:
             - Path=/customers/**
           filters:
             - StripPrefix=1
-            - name: JwtAuthenticationFilter
+
+        # ORDERS microservice (protegido con JWT)
+        - id: orders-service
+          uri: lb://orders-service
+          predicates:
+            - Host=obama.localhost
+            - Path=/orders/**
+          filters:
+            - StripPrefix=1
 
 eureka:
   client:

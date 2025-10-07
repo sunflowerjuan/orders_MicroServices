@@ -24,10 +24,10 @@ export default function ClientsPage() {
   const handleCreate = async () => {
     try {
       const { data } = await customerService.createCustomer(form);
-      setMessage("✅ Cliente creado exitosamente");
+      setMessage("Cliente creado exitosamente");
       setCustomer(data);
     } catch (err) {
-      setMessage("❌ Error creando cliente: " + (err.response?.data?.message || err.message));
+      setMessage("Error creando cliente: " + (err.response?.data?.message || err.message));
     }
   };
 
@@ -36,24 +36,24 @@ export default function ClientsPage() {
       const { data } = await customerService.findCustomerById(searchDoc);
       setCustomer(data);
       setForm(data);
-      setMessage("✅ Cliente encontrado, ahora puedes actualizarlo");
+      setMessage("Cliente encontrado, ahora puedes actualizarlo");
     } catch (err) {
       setCustomer(null);
-      setMessage("⚠️ Cliente no encontrado");
+      setMessage("Cliente no encontrado");
     }
   };
 
   const handleUpdate = async () => {
     if (!customer) {
-      setMessage("⚠️ Debes buscar un cliente antes de actualizarlo");
+      setMessage("Debes buscar un cliente antes de actualizarlo");
       return;
     }
     try {
       const { data } = await customerService.updateCustomer(form);
-      setMessage("✅ Cliente actualizado correctamente");
+      setMessage("Cliente actualizado correctamente");
       setCustomer(data);
     } catch (err) {
-      setMessage("❌ Error actualizando cliente: " + (err.response?.data?.message || err.message));
+      setMessage("Error actualizando cliente: " + (err.response?.data?.message || err.message));
     }
   };
 

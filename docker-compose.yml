@@ -107,9 +107,46 @@ services:
     profiles: ["services"]
     networks:
       - appnet
+  #-----ORDER MICROSERVICE------------
+  mongo-db:
+    image: mongo:6
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    profiles: ["services"]
+    networks:
+      - appnet
+
+  order-service:
+    build: ./orders-service
+    container_name: order-service
+    environment:
+      EUREKA_HOST: eureka-server
+      EUREKA_PORT: 8761
+      MONGO_URI: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo-db:27017/${MONGO_INITDB_DATABASE}?authSource=admin
+    ports:
+      - "8083:8083"
+    depends_on:
+      mongo-db:
+        condition: service_healthy
+    profiles: ["services"]
+    networks:
+      - appnet
 volumes:
   login_data:
   customer_data:
+  mongo_data:
 networks:
   appnet:
     driver: bridge
